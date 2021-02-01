@@ -1,5 +1,4 @@
 
-
 // Configurar o Setup da App:
 
 //Chamadas dos pacotes:
