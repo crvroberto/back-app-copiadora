@@ -1,30 +1,25 @@
 
-
-//Chamadas dos pacotes:
-var express = require('express');
+const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var Produto = require('./app/models/produto');
+const mongoose = require('mongoose');
+const Produto = require('./app/models/produto');
 mongoose.Promise = global.Promise;
-
 
 mongoose.connect('mongodb://localhost:27017/copiadora', {
     useMongoClient: true
 });
 
-//Configuração da variável app para usar o 'bodyParser()':
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//Definindo a porta onde será executada a nossa api:
 const port = process.env.port || 8000;
 
 //Rotas da nossa API:
 //=============================================================================
 
 //Criando uma instância das Rotas via Express:
-var router = express.Router();
+const router = express.Router();
 
 //Middleware para usar em todos os requests enviados para a nossa API- Mensagem Padrão:
 router.use(function(req, res, next) {
