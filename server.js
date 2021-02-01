@@ -1,20 +1,14 @@
 
-// Configurar o Setup da App:
 
 //Chamadas dos pacotes:
 var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
+const app = express();
+const bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var Produto = require('./app/models/produto');
 mongoose.Promise = global.Promise;
 
-//URI: MLab
-/*mongoose.connect('mongodb://glemos:glau123@ds062448.mlab.com:62448/node-crud-api', {
-    useMongoClient: true
-});
-*/
-//Maneira Local: MongoDb:
+
 mongoose.connect('mongodb://localhost:27017/copiadora', {
     useMongoClient: true
 });
