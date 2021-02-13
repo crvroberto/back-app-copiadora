@@ -19,10 +19,9 @@ const Schema = mongoose.Schema;
  * 
  */
 
-const ProdutoSchema = new Schema({
-    nome: String,
-    preco: Number,
-    descricao: String
+const VendaSchema = new Schema({
+    objetos : [],
+    
 });
 
-module.exports = mongoose.model('Produto', ProdutoSchema);
+module.exports = mongoose.model('Venda', VendaSchema);
