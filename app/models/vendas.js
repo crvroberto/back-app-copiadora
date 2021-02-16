@@ -9,19 +9,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-/**
- * Produto:
- * 
- * -> Id: int
- * -> Nome: String
- * -> Preco: Number
- * -> Descricao: String
- * 
- */
 
 const VendaSchema = new Schema({
-    objetos : [],
     
-});
+    objetos : [],
+    data: { type: Date, default: Date.now },
+    obs : String,
+    
+    
+})
 
 module.exports = mongoose.model('Venda', VendaSchema);

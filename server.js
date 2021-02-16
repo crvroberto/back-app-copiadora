@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Venda = require('./app/models/vendas');
+const Pedido = require('./app/models/pedidos');
 const cors = require('cors')
 
 
@@ -41,9 +42,11 @@ router.get('/', function(req, res) {
 router.route('/vendas').post(function(req, res) {
         const venda = new Venda();
         console.log(req.body)
+
         //Aqui vamos setar os campos do produto (via request):
-        venda.objetos = req.body.objetos;
-   
+        venda.objetos = req.body.objetos
+        venda.obs = req.body.obs
+
         venda.save(function(error) {
             if(error)
                 res.send('Erro ao tentar salvar o Produto....: ' + error);
@@ -59,7 +62,9 @@ router.route('/vendas').post(function(req, res) {
                 res.send('Erro ao tentar Selecionar Todos os produtos...: ' + error);
 
             res.json(vendas);
+           
         });
+        
     });
 
     //Rotas que irão terminar em '/produtos/:produto_id' (servir tanto para: GET, PUT & DELETE: id):
@@ -113,6 +118,34 @@ router.route('/vendas').post(function(req, res) {
                     res.json({ message: 'Produto Excluído com Sucesso!' });
                 });
             });
+// Api Pedidos
+router.route('/pedidos').post(function(req, res) {
+    const pedido = new Pedido();
+ 
+    
+    pedido.objetos = req.body.objetos
+    pedido.obs = req.body.obs
+
+    pedido.save(function(error) {
+        if(error)
+            res.send('Erro ao tentar salvar o Produto....: ' + error);
+        res.header("Access-Control-Allow-Origin", "*")
+        res.json({ message: 'Pedido Cadastrado com Sucesso!' });
+    });
+})
+
+/* 2) Método: Selecionar Todos Produtos (acessar em: GET http://localhost:8000/api/produtos)  */
+.get(function(req, res) {
+    Pedido.find(function(error, pedido) {
+        if(error) 
+            res.send('Erro ao tentar Selecionar Todos os produtos...: ' + error);
+
+        res.json(pedido);
+    });
+});
+
+
+
 
 
 //Definindo um padrão das rotas prefixadas: '/api':
