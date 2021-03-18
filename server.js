@@ -18,32 +18,20 @@ app.use(cors())
 const port = process.env.port || 3030;
 
 
-//Rotas da nossa API:
-
 //Criando uma instância das Rotas via Express:
 const router = express.Router();
 
-//Middleware para usar em todos os requests enviados para a nossa API- Mensagem Padrão:
-router.use(function(req, res, next) {
-    console.log('Algo está acontecendo aqui....');
-    next(); //aqui é para sinalizar de que prosseguiremos para a próxima rota. E que não irá parar por aqui!!!
+router.use((req, res, next) => {    next();  /*Midlaware*/});
+
+
+router.get('/', (req, res) => {
+    res.json({ message: 'Rota Teste' })
 });
 
-//Rota de Teste para sabermos se tudo está realmente funcionando (acessar através: GET: http://localhost:8000/api): 
-router.get('/', function(req, res) {
-    res.json({ message: 'Beleza! Bem vindo(a) a nossa Loja XYZ' })
-});
-
-//API's:
-//==============================================================================
-
-//Rotas que terminarem com '/produtos' (servir: GET ALL & POST)
     /* 1) Método: Criar Produto (acessar em: POST http://localhost:8000/api/produtos)  */
-router.route('/vendas').post(function(req, res) {
+router.route('/vendas').post((req, res) =>{
         const venda = new Venda();
-        console.log(req.body)
-
-        //Aqui vamos setar os campos do produto (via request):
+        
         venda.objetos = req.body.objetos
         venda.obs = req.body.obs
 
@@ -87,17 +75,17 @@ router.route('/vendas').post(function(req, res) {
     .put(function(req, res) {
 
         //Primeiro: para atualizarmos, precisamos primeiro achar 'Id' do 'Produto':
-        Venda.findById(req.params.produto_id, function(error, produto) {
+        Venda.findById(req.params.produto_id, function(error, venda) {
+            
             if (error) 
                 res.send("Id do Produto não encontrado....: " + error);
 
                 //Segundo: 
-                produto.nome = req.body.nome;
-                produto.preco = req.body.preco;
-                produto.descricao = req.body.descricao;
-
+                venda.objetos = req.body.objetos
+                venda.obs = req.body.obs
+            
                 //Terceiro: Agora que já atualizamos os dados, vamos salvar as propriedades:
-                produto.save(function(error) {
+                venda.save(function(error) {
                     if(error)
                         res.send('Erro ao atualizar o produto....: ' + error);
 
@@ -143,6 +131,21 @@ router.route('/pedidos').post(function(req, res) {
         res.json(pedido);
     });
 });
+router.route('/pedidos/:produto_id')
+
+    /* 3) Método: Selecionar por Id: (acessar em: GET http://localhost:8000/api/produtos/:produto_id) */
+    .get(function (req, res) {
+        
+        //Função para poder Selecionar um determinado produto por ID - irá verificar se caso não encontrar um detemrinado
+        //produto pelo id... retorna uma mensagem de error:
+        Pedido.findById(req.params.produto_id, function(error, produto) {
+            if(error)
+                res.send('Id do Produto não encontrado....: ' + error);
+
+            res.json(produto);
+        });
+    })
+
 
 
 

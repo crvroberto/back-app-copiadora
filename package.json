@@ -14,7 +14,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.11.15"
+    "mongoose": "^5.12.0"
   },
   "author": "Glaucia Lemos",
   "license": "MIT",
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/glaucia86/video-nodejs-mongo-restful-crud#readme",
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.19.4"
   }
 }

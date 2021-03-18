@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const VendaSchema = new Schema({
+const Pedido = new Schema({
     
     objetos : [],
     data: { type: Date, default: Date.now },
@@ -9,4 +9,4 @@ const VendaSchema = new Schema({
     
 })
 
-module.exports = mongoose.model('Pedido', VendaSchema);
+module.exports = mongoose.model('Pedido', Pedido);
