@@ -32,7 +32,7 @@ router.route('/vendas').post((req, res) => {
 
     venda.objetos = req.body.objetos
     venda.obs = req.body.obs
-
+    venda.funcionario = req.body.funcionario
     venda.save((error) => {
         if (error)
             res.send('Erro ao tentar salvar o Produto....: ' + error)
@@ -92,6 +92,7 @@ router.route('/pedidos').post((req, res) => {
 
     pedido.objetos = req.body.objetos
     pedido.obs = req.body.obs
+    pedido.funcionario = req.body.funcionario
 
     pedido.save((error) => {
         if (error)
