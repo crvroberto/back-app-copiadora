@@ -1,10 +1,13 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const Venda = require('./app/models/vendas');
-const Pedido = require('./app/models/pedidos');
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 const cors = require('cors')
+
+const Venda = require('./app/models/vendas')
+const Pedido = require('./app/models/pedidos')
+const Client = require('./app/models/clients')
+
 
 
 mongoose.Promise = global.Promise;
@@ -26,8 +29,9 @@ router.get('/', (req, res) => {
     res.json({ message: 'Rota Teste' })
 });
 
-
-router.route('/vendas').post((req, res) => {
+// Api vendas
+router.route('/vendas')
+.post((req, res) => {
     const venda = new Venda()
 
     venda.objetos = req.body.objetos
@@ -39,7 +43,8 @@ router.route('/vendas').post((req, res) => {
         res.header("Access-Control-Allow-Origin", "*")
         res.json({ message: 'Venda Cadastrado com Sucesso!' })
     })
-}).get((req, res) => {
+})
+.get((req, res) => {
     Venda.find((error, vendas) => {
         if (error)
             res.send('Erro ao tentar Selecionar Todos os produtos...: ' + error)
@@ -50,14 +55,16 @@ router.route('/vendas').post((req, res) => {
 
 })
 
-router.route('/vendas/:produto_id').get((req, res) =>{
+router.route('/vendas/:produto_id')
+.get((req, res) =>{
         Venda.findById(req.params.produto_id, (error, produto) =>{
             if (error)
                 res.send('Id do Produto não encontrado....: ' + error);
 
             res.json(produto);
         });
-    }).put((req, res) =>{
+    })
+.put((req, res) =>{
         Venda.findById(req.params.produto_id, (error, venda) =>{
 
             if (error)
@@ -75,7 +82,8 @@ router.route('/vendas/:produto_id').get((req, res) =>{
                 res.json({ message: 'Produto atualizado com sucesso!' });
             });
         });
-    }).delete((req, res) =>{
+    })
+.delete((req, res) =>{
 
         Venda.deleteOne({
             _id: req.params.produto_id
@@ -87,7 +95,8 @@ router.route('/vendas/:produto_id').get((req, res) =>{
     })
 
 // Api Pedidos
-router.route('/pedidos').post((req, res) => {
+router.route('/pedidos')
+.post((req, res) => {
     const pedido = new Pedido()
 
     pedido.objetos = req.body.objetos
@@ -100,21 +109,24 @@ router.route('/pedidos').post((req, res) => {
         res.header("Access-Control-Allow-Origin", "*")
         res.json({ message: 'Pedido Cadastrado com Sucesso!' })
     })
-}).get((req, res) =>{
+})
+.get((req, res) =>{
         Pedido.find((error, pedido) =>{
             if (error)
                 res.send('Erro ao tentar Selecionar Todos os produtos...: ' + error)
 
             res.json(pedido)
         })})
-router.route('/pedidos/:produto_id').get((req, res) =>{
+router.route('/pedidos/:produto_id')
+.get((req, res) =>{
         Pedido.findById(req.params.produto_id, (error, produto) => {
             if (error)
                 res.send('Id do Produto não encontrado....: ' + error)
 
             res.json(produto);
         })
-    }).put((req, res) =>{
+    })
+.put((req, res) =>{
 
         //Primeiro: para atualizarmos, precisamos primeiro achar 'Id' do 'Produto':
         Pedido.findById(req.params.produto_id, (error, pedido)=> {
@@ -134,7 +146,74 @@ router.route('/pedidos/:produto_id').get((req, res) =>{
                 res.json({ message: 'Produto atualizado com sucesso!' });
             });
         });
-    }).delete((req, res) =>{
+    })
+.delete((req, res) =>{
+
+        Pedido.deleteOne({
+            _id: req.params.produto_id
+        }, (error) =>{
+            if (error)
+                res.send("Id do Produto não encontrado....: " + error);
+
+            res.json({ message: 'Produto Excluído com Sucesso!' });
+        });
+    });
+
+// Api Clients
+
+router.route('/clientes')
+.post((req, res) => {
+    const client = new Client()
+
+    client.nome = req.body.nome
+    client.numero = req.body.numero
+    console.log(client)
+
+    client.save((error) => {
+        if (error)
+            res.send('Erro ao tentar salvar o Produto....: ' + error)
+        res.header("Access-Control-Allow-Origin", "*")
+        res.json({ message: 'Pedido Cadastrado com Sucesso!' })
+    })
+})
+.get((req, res) =>{
+        Client.find((error, pedido) =>{
+            if (error)
+                res.send('Erro ao tentar Selecionar Todos os produtos...: ' + error)
+
+            res.json(pedido)
+        })})
+router.route('/clientes/:produto_id')
+.get((req, res) =>{
+        Pedido.findById(req.params.produto_id, (error, produto) => {
+            if (error)
+                res.send('Id do Produto não encontrado....: ' + error)
+
+            res.json(produto);
+        })
+    })
+.put((req, res) =>{
+
+        //Primeiro: para atualizarmos, precisamos primeiro achar 'Id' do 'Produto':
+        Pedido.findById(req.params.produto_id, (error, pedido)=> {
+
+            if (error)
+                res.send("Id do Produto não encontrado....: " + error);
+
+            //Segundo: 
+            pedido.objetos = req.body.objetos
+            pedido.obs = req.body.obs
+
+            //Terceiro: Agora que já atualizamos os dados, vamos salvar as propriedades:
+            pedido.save((error) =>{
+                if (error) 
+                    res.send('Erro ao atualizar o produto....: ' + error);
+
+                res.json({ message: 'Produto atualizado com sucesso!' });
+            });
+        });
+    })
+.delete((req, res) =>{
 
         Pedido.deleteOne({
             _id: req.params.produto_id
